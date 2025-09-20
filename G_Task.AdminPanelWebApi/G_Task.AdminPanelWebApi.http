@@ -1,0 +1,6 @@
+@G_Task.AdminPanelWebApi_HostAddress = http://localhost:5252
+
+GET {{G_Task.AdminPanelWebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
