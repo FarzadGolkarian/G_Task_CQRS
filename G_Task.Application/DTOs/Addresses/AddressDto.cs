@@ -1,6 +1,5 @@
 ﻿using G_Task.Common.Helpers;
 using G_Task.Domain.Common;
-using System.Text.Json.Serialization;
 
 namespace G_Task.Application.DTOs.Addresses
 {

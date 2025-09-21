@@ -8,13 +8,13 @@ using MediatR;
 
 namespace G_Task.Application.Features.Persons.Handlers.Queries
 {
-    public class GetPersonRequestHandler: IRequestHandler<GetPersonRequest, PersonDto>
+    public class GetClientPersonRequestHandler : IRequestHandler<GetClientPersonRequest, PersonDto>
     {
         private readonly IMapper _mapper ;
         private readonly IPersonRepository _personRepository ;
         private readonly Serilog.ILogger _logger;
 
-        public GetPersonRequestHandler(IMapper mapper,
+        public GetClientPersonRequestHandler(IMapper mapper,
                                IPersonRepository personRepository,
                                Serilog.ILogger logger)
         {
@@ -22,13 +22,13 @@ namespace G_Task.Application.Features.Persons.Handlers.Queries
             _personRepository = personRepository;
             _logger = logger;
         }
-        public async Task<PersonDto> Handle(GetPersonRequest request, CancellationToken cancellationToken)
+        public async Task<PersonDto> Handle(GetClientPersonRequest request, CancellationToken cancellationToken)
         {
             var response = new Common.Responses.BaseCommandResponse();
             try
             {
                 var person =
-                    await _personRepository.GetPerson(request.ID);
+                    await _personRepository.GetClientPerson(request.ID);
 
                 if (person == null) throw new NotFoundException(nameof(Person), request.ID);
 
@@ -37,14 +37,14 @@ namespace G_Task.Application.Features.Persons.Handlers.Queries
             }
             catch (Common.Exceptions.NotFoundException ex)
             {
-                _logger.Error("{methodName} {errorMessage} {@ex}", nameof(GetPersonRequestHandler), ex.Message, request.ID);
+                _logger.Error("{methodName} {errorMessage} {@ex}", nameof(GetClientPersonRequestHandler), ex.Message, request.ID);
 
                 return null;
             }
 
             catch (Exception ex)
             {
-                _logger.Error("{methodName} {errorMessage} {@ex}", nameof(GetPersonRequestHandler), ex.Message, ex);
+                _logger.Error("{methodName} {errorMessage} {@ex}", nameof(GetClientPersonRequestHandler), ex.Message, ex);
 
                 throw;
             }

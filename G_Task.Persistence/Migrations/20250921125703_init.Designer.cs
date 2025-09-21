@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace G_Task.Persistence.Migrations
 {
     [DbContext(typeof(G_TaskDbContext))]
-    [Migration("20250920105803_re-persiandate")]
-    partial class repersiandate
+    [Migration("20250921125703_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

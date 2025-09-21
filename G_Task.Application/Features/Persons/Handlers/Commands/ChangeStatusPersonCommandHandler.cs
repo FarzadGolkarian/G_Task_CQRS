@@ -1,6 +1,6 @@
-﻿using AutoMapper;
-using G_Task.Application.Contracts.Persistence.Persons;
+﻿using G_Task.Application.Contracts.Persistence.Persons;
 using G_Task.Application.Features.Persons.Requests.Commands;
+using G_Task.Common.Exceptions;
 using G_Task.Common.Responses;
 using G_Task.Domain;
 using MediatR;
@@ -32,14 +32,14 @@ namespace G_Task.Application.Features.Persons.Handlers.Commands
 
                 var person = await _personRepository.GetAsync(request.ID);
 
-                if (person == null) throw new Common.Exceptions.NotFoundException(nameof(Person), request.ID);
+                if (person == null) throw new NotFoundException(nameof(Person), request.ID);
 
                 var success = await _personRepository.ChangeStatus(request.ID , request.IsActive);
 
                 if (!success) throw new Exception("Failed to change person status.");                
 
                 response.Success = true;
-                response.Message = "Change Person Status successfully.";
+                response.Message = ErrorMessages.ChangePersonStatus;
 
                 return response;
             }
@@ -50,7 +50,7 @@ namespace G_Task.Application.Features.Persons.Handlers.Commands
 
                 response.Success = false;
                 response.Message = ex.Message;
-
+                response.Status = 404;
                 return response;
             }
             catch (Exception ex)
@@ -59,8 +59,8 @@ namespace G_Task.Application.Features.Persons.Handlers.Commands
                 _logger.Error("{methodName} {errorMessage} {@ex}", nameof(ChangeStatusPersonCommand), ex.Message, ex);
 
                 response.Success = false;
-                response.Message = "An error occurred while Change Person Status.";
-
+                response.Message = ErrorMessages.ChangePersonStatusError;
+                response.Status = 500;
                 return response;
             }
         }

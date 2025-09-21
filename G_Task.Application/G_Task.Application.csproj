@@ -23,9 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Addresses\Handlers\Commands\" />
     <Folder Include="Features\Addresses\Handlers\Queries\" />
-    <Folder Include="Features\Addresses\Requests\Commands\" />
     <Folder Include="Features\Addresses\Requests\Queries\" />
   </ItemGroup>
 

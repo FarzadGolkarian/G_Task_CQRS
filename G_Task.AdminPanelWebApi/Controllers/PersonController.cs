@@ -18,36 +18,32 @@ namespace G_Task.AdminPanelWebApi.Controllers
             _mediator = mediator;
         }
 
-        // GET: api/<FoodController>
         [HttpGet]
         public async Task<ActionResult<List<PersonListDto>>> GetAll()
         {
             return Ok(await _mediator.Send(new GetPersonListRequest()));
         }
 
-        // GET api/<FoodController>/5
         [HttpGet("{personId}")]
         public async Task<ActionResult<PersonDto>> Get(long personId)
         {
             return Ok(await _mediator.Send(new GetPersonRequest { ID = personId }));
         }
 
-        // POST api/<FoodController>
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] CreatePersonDto CreatePerson)
         {
             return Ok(await _mediator.Send(new CreatePersonCommand { CreatePersonDto = CreatePerson }));
         }
 
-        // PUT api/<FoodController>/5
-        [HttpPut("{id}")]
+        [HttpPut("{personId}")]
         public async Task<ActionResult> Put(long personId, [FromBody] UpdatePersonDto UpdatePerson)
         {
             return Ok(await _mediator.Send(new UpdatePersonCommand { UpdatePersonDto = UpdatePerson, ID = personId }));
         }
 
-        // DELETE api/<FoodController>/5
-        [HttpDelete("{id}")]
+
+        [HttpDelete("{personId}")]
         public async Task<ActionResult> Delete(long personId)
         {
             return Ok(await _mediator.Send(new DeletePersonCommand { ID = personId }));
@@ -56,9 +52,9 @@ namespace G_Task.AdminPanelWebApi.Controllers
         [HttpPut("{personId:long}/ChangeStatus")]
         public async Task<ActionResult> ChangePersonStatus(long personId, bool status)
         {
-            await _mediator.Send (new ChangeStatusPersonCommand { ID = personId ,  IsActive = status});
+            return Ok(await _mediator.Send (new ChangeStatusPersonCommand { ID = personId ,  IsActive = status}));
 
-            return Ok();
+            
         }
     }
 }

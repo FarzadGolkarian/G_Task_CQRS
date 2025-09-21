@@ -19,7 +19,7 @@ namespace G_Task.Persistence.Repositories
         {
             var person = await _dbContext.Set<Person>().FindAsync(id);
 
-            if (person != null) 
+            if (person != null)
             {
                 person.IsActive = status;
 
@@ -34,26 +34,106 @@ namespace G_Task.Persistence.Repositories
 
         }
 
-        public async Task<PersonDto?> GetPerson(long personId)
+        public async Task<PersonDto?> GetClientPerson(long personId)
         {
-           
+
             try
             {
                 return await _dbContext.Set<Person>()
-                    .Where( p => p.ID == personId)
+                    .Where(p => p.ID == personId && p.IsActive)
                     .Select(p => new PersonDto
-                {
-                    ID = p.ID,
-                    FirstName = p.FirstName,
-                    LastName = p.LastName,
-                    NationalCode = p.NationalCode,
-                    PersonAddress = p.Addresses.Select(s => new Application.DTOs.Addresses.AddressDto
                     {
-                        AddressType = s.AddressType,
-                        PersonAddress = s.PersonAddress
-                    }).ToList()
-                }).FirstOrDefaultAsync();
-              
+                        ID = p.ID,
+                        FirstName = p.FirstName,
+                        LastName = p.LastName,
+                        NationalCode = p.NationalCode,
+                        PersonAddress = p.Addresses
+                        .Where(w => w.IsActive)
+                        .Select(s => new Application.DTOs.Addresses.AddressDto
+                        {
+                            AddressType = s.AddressType,
+                            PersonAddress = s.PersonAddress
+                        }).ToList()
+                    }).FirstOrDefaultAsync();
+
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("{methodName} {errorMessage} {@ex}", nameof(GetPersonList), ex.Message, ex);
+
+                return null;
+            }
+        }
+
+        public async Task<List<PersonListDto>> GetClientPersonList()
+        {
+
+            try
+            {
+                return await _dbContext.Set<Person>()
+                    .Where(p => p.IsActive)
+                     .Select(p => new PersonListDto
+                     {
+                         ID = p.ID,
+                         FirstName = p.FirstName,
+                         LastName = p.LastName,
+                         NationalCode = p.NationalCode,
+                         PersonAddress = p.Addresses
+                         .Where(w => w.IsActive)
+                         .Select(s => new Application.DTOs.Addresses.AddressDto
+                         {
+                             AddressType = s.AddressType,
+                             PersonAddress = s.PersonAddress
+                         }).ToList()
+                     }).ToListAsync();
+
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("{methodName} {errorMessage} {@ex}", nameof(GetPersonList), ex.Message, ex);
+
+                return null;
+            }
+        }
+
+        public async Task<bool> GetNationalCode(string nationalCode)
+        {
+            try
+            {
+                if (await _dbContext.Set<Person>()
+                    .AnyAsync(b => b.NationalCode == nationalCode))
+                    return true;
+                else return false;
+            }
+            catch (Exception ex)
+            {
+
+                _logger.Error("{methodName} {errorMessage} {@ex}", nameof(GetNationalCode), ex.Message, ex);
+
+                return false;
+            }
+        }
+
+        public async Task<PersonDto?> GetPerson(long personId)
+        {
+
+            try
+            {
+                return await _dbContext.Set<Person>()
+                    .Where(p => p.ID == personId)
+                    .Select(p => new PersonDto
+                    {
+                        ID = p.ID,
+                        FirstName = p.FirstName,
+                        LastName = p.LastName,
+                        NationalCode = p.NationalCode,
+                        PersonAddress = p.Addresses.Select(s => new Application.DTOs.Addresses.AddressDto
+                        {
+                            AddressType = s.AddressType,
+                            PersonAddress = s.PersonAddress
+                        }).ToList()
+                    }).FirstOrDefaultAsync();
+
             }
             catch (Exception ex)
             {
@@ -67,19 +147,19 @@ namespace G_Task.Persistence.Repositories
         {
             try
             {
-               return  await _dbContext.Set<Person>()
-                    .Select(p => new PersonListDto
-                {
-                    ID = p.ID,
-                    FirstName = p.FirstName,
-                    LastName = p.LastName,
-                    NationalCode = p.NationalCode,
-                    PersonAddress = p.Addresses.Select(s => new Application.DTOs.Addresses.AddressDto
-                    {
-                        AddressType = s.AddressType,
-                        PersonAddress = s.PersonAddress
-                    }).ToList()
-                }).ToListAsync();
+                return await _dbContext.Set<Person>()
+                     .Select(p => new PersonListDto
+                     {
+                         ID = p.ID,
+                         FirstName = p.FirstName,
+                         LastName = p.LastName,
+                         NationalCode = p.NationalCode,
+                         PersonAddress = p.Addresses.Select(s => new Application.DTOs.Addresses.AddressDto
+                         {
+                             AddressType = s.AddressType,
+                             PersonAddress = s.PersonAddress
+                         }).ToList()
+                     }).ToListAsync();
 
             }
             catch (Exception ex)
@@ -89,9 +169,6 @@ namespace G_Task.Persistence.Repositories
                 return null;
             }
 
-
-
-            
         }
 
     }

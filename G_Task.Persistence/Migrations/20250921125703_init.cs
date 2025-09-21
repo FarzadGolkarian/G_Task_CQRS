@@ -20,7 +20,6 @@ namespace G_Task.Persistence.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     NationalCode = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    PersianDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreateBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)

@@ -6,5 +6,5 @@ namespace G_Task.Application.Contracts.Persistence.Addresses
     {
         Task<bool> ChangeStatus(long id, bool status);
     }
- 
+
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using G_Task.Common.Exceptions;
+using System.ComponentModel;
 using System.Reflection;
 
 namespace G_Task.Common.Helpers
@@ -23,11 +24,11 @@ namespace G_Task.Common.Helpers
 
         }
 
-        public static void ValidationEnumDefined(Type enumType, Enum ename)
+        public static void ValidationEnumDefined(Type enumType, Enum ename, string value)
         {
             if (!enumType.IsEnumDefined(ename))
-
-                throw new KeyNotFoundException($"Enum with name {ename} not found.");
+               
+                throw new KeyNotFoundException(string.Format(ErrorMessages.ValidationEnumType, value));
         }
     }
 }

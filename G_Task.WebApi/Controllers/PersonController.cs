@@ -1,11 +1,10 @@
 ﻿using G_Task.Application.DTOs.Persons;
 using G_Task.Application.Features.Persons.Requests.Queries;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace G_Task.WebApi.Controllers
-{
+    namespace G_Task.WebApi.Controllers;
+
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
@@ -18,19 +17,17 @@ namespace G_Task.WebApi.Controllers
             _mediator = mediator;
         }
 
-        // GET: api/<FoodController>
         [HttpGet]
         public async Task<ActionResult<List<PersonListDto>>> GetAll()
         {
-            return Ok(await _mediator.Send(new GetPersonListRequest()));
+            return Ok(await _mediator.Send(new GetClientPersonListRequest()));
         }
 
-        // GET api/<FoodController>/5
         [HttpGet("{personId}")]
         public async Task<ActionResult<PersonDto>> Get(long personId)
         {
-            return Ok(await _mediator.Send(new GetPersonRequest { ID = personId }));
+            return Ok(await _mediator.Send(new GetClientPersonRequest { ID = personId }));
         }
 
     }
-}
+

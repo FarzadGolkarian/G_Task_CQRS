@@ -8,13 +8,13 @@ using Microsoft.EntityFrameworkCore;
 namespace G_Task.Application.Features.Persons.Handlers.Queries
 {
 
-    public class GetPersonListRequestHandler : IRequestHandler<GetPersonListRequest, List<PersonListDto>>
+    public class GetClientPersonListRequestHandler : IRequestHandler<GetClientPersonListRequest, List<PersonListDto>>
     {
         private readonly IMapper _mapper;
         private readonly IPersonRepository _personRepository;
         private readonly Serilog.ILogger _logger;
 
-        public GetPersonListRequestHandler(IMapper mapper,
+        public GetClientPersonListRequestHandler(IMapper mapper,
                                        IPersonRepository personRepository,
                                        Serilog.ILogger logger)
         {
@@ -23,17 +23,17 @@ namespace G_Task.Application.Features.Persons.Handlers.Queries
             _logger = logger;
         }
 
-        public async Task<List<PersonListDto>> Handle(GetPersonListRequest request, CancellationToken cancellationToken)
+        public async Task<List<PersonListDto>> Handle(GetClientPersonListRequest request, CancellationToken cancellationToken)
         {
 
             try
             {
                 var personList =
-                    await _personRepository.GetPersonList();
+                    await _personRepository.GetClientPersonList();
 
                 if (personList == null || !personList.Any())
                 {
-                    _logger.Warning("{methodName} No persons found.", nameof(GetPersonListRequestHandler));
+                    _logger.Warning("{methodName} No persons found.", nameof(GetClientPersonListRequestHandler));
 
                     return null;
                 }
@@ -44,7 +44,7 @@ namespace G_Task.Application.Features.Persons.Handlers.Queries
 
             catch (Exception ex)
             {
-                _logger.Error("{methodName} {errorMessage} {@ex}", nameof(GetPersonListRequestHandler), ex.Message, ex);
+                _logger.Error("{methodName} {errorMessage} {@ex}", nameof(GetClientPersonListRequestHandler), ex.Message, ex);
 
                 throw;
             }

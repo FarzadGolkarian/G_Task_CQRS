@@ -35,6 +35,7 @@ namespace G_Task.Application.Profiles
               .ForMember(s => s.PersonAddress, ss => ss.MapFrom(src => src.Addresses))
               .ReverseMap();
 
+
             CreateMap<Person, UpdatePersonDto>().ReverseMap();
 
 

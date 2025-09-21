@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Elasticsearch.Net;
 using G_Task.Application.Contracts.Persistence.Persons;
 using G_Task.Application.Features.Persons.Requests.Commands;
+using G_Task.Common.Exceptions;
 using G_Task.Common.Responses;
 using G_Task.Domain;
 using MediatR;
@@ -35,7 +37,9 @@ namespace G_Task.Application.Features.Persons.Handlers.Commands
                 await _personRepository.Delete(person);
         
                 response.Success = true;
-                response.Message = "Person deleted successfully.";
+                response.Message = ErrorMessages.PersonDeleted;
+                response.ID = request.ID;
+                response.Status = 200;
 
                 return response;
             }
@@ -45,8 +49,9 @@ namespace G_Task.Application.Features.Persons.Handlers.Commands
                 _logger.Error("{methodName} {errorMessage} {@ex}", nameof(DeletePersonCommandHandler), ex.Message, ex);
 
                 response.Success = false;
-                response.Message = ex.Message; 
-
+                response.Message = ex.Message;
+                response.ID = request.ID;
+                response.Status = 404;
                 return response;
             }
             catch (Exception ex)
@@ -55,8 +60,9 @@ namespace G_Task.Application.Features.Persons.Handlers.Commands
                 _logger.Error("{methodName} {errorMessage} {@ex}", nameof(DeletePersonCommandHandler), ex.Message, ex);
 
                 response.Success = false;
-                response.Message = "An error occurred while deleting the person.";
-
+                response.Message = ErrorMessages.PersonDeletedError;
+                response.ID = request.ID;
+                response.Status = 500;
                 return response;
             }
         }
